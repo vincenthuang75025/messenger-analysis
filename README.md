@@ -8,4 +8,5 @@
 ## Ideas
 - featurise each person / human readable insights for each person
 - featurise yourself per conversation 
+- find online dictionary of expressions classified by something like affection
 
