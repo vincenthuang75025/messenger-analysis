@@ -75,5 +75,5 @@ for folder in selected_folders:
     parse_single_person(json_name)
     
     
-with open('parsed_data.json', 'w') as outfile:
+with open('bow_data.json', 'w') as outfile:
     json.dump(results, outfile)
