@@ -25,6 +25,14 @@ reformat into pds for pca (rows = person, columns = words, cells = tfid score)
 follow towards datascience tutorial
 
 """
+# %% Imports
+import numpy as np 
+import json 
+import math
+from sklearn.manifold import TSNE
+from sklearn.decomposition import TruncatedSVD
+from sklearn.manifold import TSNE
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 # %%
@@ -100,6 +108,24 @@ if __name__ == "__main__":
     tfidf_dict = get_tfidf_dict(data,bow) 
     
     
-
-
-
+    vocab = set()
+    for name, scores in tfidf_dict.items():
+        arr = sorted(scores.items(), key=lambda x: x[1])
+        # print(name, [word for word, num in arr[-5:]])
+        [vocab.add(word) for word, num in arr[-20:-10]]
+    dataset = {}
+    for name, scores in tfidf_dict.items():
+        dataset[name] = np.array([scores.get(word) if scores.get(word) else 0 for word in vocab])
+    
+    svd_50 = TruncatedSVD(n_components=150)
+    trunc_50 = svd_50.fit_transform(np.array([ val for val in dataset.values()]))
+    tsne = TSNE(n_components=2, random_state=0, learning_rate=10)
+    coords = tsne.fit_transform(trunc_50).T
+    
+    
+    plt.figure(figsize=(60,60))
+    plt.scatter(coords[0], coords[1])
+    for coord, name in zip(coords.T, dataset.keys()):
+        plt.annotate(name, xy=(coord[0], coord[1]))
+    plt.savefig("yay")
+    
