@@ -2,8 +2,9 @@
 # %%  IMPORTS
 
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
+# import matplotlib.pyplot as plt
+# import pandas as pd
+import math
 import json
 
 
@@ -23,15 +24,7 @@ PCA plot (single)T
 reformat into pds for pca (rows = person, columns = words, cells = tfid score)
 follow towards datascience tutorial
 
-
-
-
 """
-# %% Imports
-import numpy as np 
-import json 
-import math
-
 
 
 # %%
@@ -51,7 +44,7 @@ def compute_tf(word_dict):
 
 # take all the word dictionaries 
 # return
-def compute_idf(data,bag_of_words_corpus):
+def compute_idf(data,bow_corpus):
     idf_dict = {}
     
     def is_in(word,document): # binary
@@ -59,7 +52,7 @@ def compute_idf(data,bag_of_words_corpus):
             return 1 
         return 0 
     
-    for word in bag_of_words_corpus.keys():
+    for word in bow_corpus.keys():
         n = len(data)
         df_t = 0
         for name in data.keys():
@@ -69,9 +62,9 @@ def compute_idf(data,bag_of_words_corpus):
     return idf_dict
 
 # takes data and bag of words of entire corpus (dic w/ key = word, value = freq)
-def get_tfidf_dict(data,bag_of_words_corpus):
+def get_tfidf_dict(data,bow_corpus):
     tfidf_dict = {}
-    idf_dict = compute_idf(data,bag_of_words_corpus)
+    idf_dict = compute_idf(data,bow_corpus)
     for name in data.keys():
         tfidf_dict[name] = {}
         tf_dict = compute_tf(data[name]["word_counts"]) 
@@ -82,40 +75,29 @@ def get_tfidf_dict(data,bag_of_words_corpus):
     return tfidf_dict 
             
 # retunrs dic key = word ; value = freq net 
-def get_bag_of_words_them(data):
-    bag_of_words_all_them = {}
+def get_bow(data,pers='word_counts'):
+    bow_all_them = {}
     for name in data:
-        for word,n in data[name]['word_counts'].items():
-            if word in bag_of_words_all_them:
-                bag_of_words_all_them[word]+= n
-            else:
-                bag_of_words_all_them[word]=n
-    return bag_of_words_all_them
-    
-def get_bag_of_words_me(data):
-    return
-
-def get_bag_of_words_all(data):
-    return
-
+        for word,n in data[name][pers].items():
+            if word in bow_all_them:
+                bow_all_them[word]+= n
+            else: 
+                bow_all_them[word]=n
+    return bow_all_them
     
 
 
-
-# with open('~/Documents/code/facebook/parsed_data.json') as json_file:
-#     data = json.load(json_file)
-    
 # %%
     
 if __name__ == "__main__":
     # Load json file
-    with open('data/parsed_data.json') as json_file:
+    with open('data/bow_data.json') as json_file:
         data = json.load(json_file) 
         
     # THE CORPUS IS ALL THE PEOPLE WHO MESSAGE YOU 
-    words_all = get_bag_of_words_them(data)
-    # idf_dict = compute_idf(data,words_all) 
-    tfidf_dict = get_tfidf_dict(data,words_all)
+    # them is word_counts, me is word_counts_self
+    bow = get_bow(data,pers='word_counts')
+    tfidf_dict = get_tfidf_dict(data,bow) 
     
     
 
