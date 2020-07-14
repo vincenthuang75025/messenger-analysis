@@ -81,7 +81,17 @@ def get_tfidf_dict(data,bow_corpus):
                 tfidf_score = idf_score * tf_dict[word] 
                 tfidf_dict[name][word] = tfidf_score 
     return tfidf_dict 
-            
+
+# takes word dictionary for a single document
+# returns the shannon entropy of this document
+def get_shannon(word_dict):
+    n = sum(word_dict.values())
+    prob_array = [count/n for count in word_dict.values()]
+    shannon = -sum([p*math.log2(p) for p in prob_array])
+    return shannon,n
+
+
+
 # retunrs dic key = word ; value = freq net 
 def get_bow(data,pers='word_counts'):
     bow_all_them = {}
