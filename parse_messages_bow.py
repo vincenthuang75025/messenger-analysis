@@ -34,8 +34,8 @@ from collections import Counter
 """
 Change the sender name and path to point to your download
 """
-sender_name = "Marley Xiong"
-path = 'messages-2018-2020/inbox/'
+sender_name = "Stephen Fay"
+path = 'data/messages/inbox/'
 folder_names = os.listdir(path)
 min_bytes = 1000
 selected_folders = []
@@ -62,7 +62,7 @@ def parse_single_person(path):
             results[person_name] = {'word_counts': dict(word_counts), 'word_counts_self': dict(word_counts_self)}
             
 for f in folder_names: 
-    if f != '.DS_Store':
+    if f != '.DS_Store' and f.lower()==f:
         size = os.path.getsize(path + f + '/message_1.json')
         print(size)
         if size > min_bytes:
@@ -77,3 +77,5 @@ for folder in selected_folders:
     
 with open('bow_data.json', 'w') as outfile:
     json.dump(results, outfile)
+
+
