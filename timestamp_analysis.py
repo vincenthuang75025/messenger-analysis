@@ -49,6 +49,17 @@ def smooth(x,window_len=11,window='hanning'):
     return y
 
 result = []
+names = list(df['name'].unique())
+names = [name for name in names if len(df[df['name'] ==name]) > 200] #and name != 'Zachary Feng' and name != 'Gleb Posobin']
+
+from matplotlib import cm
+
+colorange = 570
+viridis = cm.get_cmap('Spectral', colorange)
+cmap = viridis(range(colorange))
+
+colors = []
+first = []
 for name in names:
     data=day['timestamp'][name]
     formatted = data.to_frame()
@@ -57,10 +68,14 @@ for name in names:
     arr = np.zeros(365*2)
     for i, num in bigarr:
         arr[num-1] = i
+    first_day = np.min(bigarr.T[1])
+    first.append(first_day)
     result.append(smooth(arr,window_len=25))
+    colors.append(cmap[first_day])
     # result.append(arr)
+inds = np.array(first).argsort()
 plt.figure(figsize=(20,20))
 x = np.linspace(0,740, len(result[0]));
-plt.stackplot(x, result, labels=names)
+plt.stackplot(x, np.array(result)[inds], labels=np.array(names)[inds], colors=np.array(colors)[inds])
 plt.legend()
-
+plt.savefig('all.png')
