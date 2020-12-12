@@ -6,7 +6,7 @@
 To make graph visualization,
 
 1. Download Messenger data from Facebook and move the downloaded `messages` folder into this folder
-2. run `python3 parse_messages_time_domain.py` to generate timestamp JSON
+2. change the path name and your own name in `parse_messages_time_domain.py`, then run `python3 parse_messages_time_domain.py` to generate timestamp JSON
 3. run `python3 timestamp_analysis.py` to get pictures :)
 
 ## Other files
