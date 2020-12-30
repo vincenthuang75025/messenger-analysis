@@ -14,6 +14,8 @@ To make graph visualization,
 _parse_messages.py_ takes data form json and parses it into of dics for each person
 _convo_anal_1_ for the moment it generate the does tfidf dictionary
 
+_rank.py_ prints your top N chats ranked by chat size
+
 ## Ideas
 
 - featurise each person / human readable insights for each person
