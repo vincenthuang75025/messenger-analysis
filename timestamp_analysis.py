@@ -7,9 +7,9 @@ from matplotlib import cm
 from datetime import datetime
 # load json file
 
-MIN_MESSAGES = 20  # minimum number of messages for person to be included in plot
-OUTPUT_FILENAME = '2019_2020.png'
-start_day = '2019-01-01'  # can change this
+MIN_MESSAGES = 50  # minimum number of messages for person to be included in plot
+OUTPUT_FILENAME = '2020_2020.png'
+start_day = '2020-01-01'  # can change this
 
 
 def load_json(path="timestamp_dict_3.json"):
@@ -31,7 +31,7 @@ max_date = df.index.max()
 n_days = (max_date - min_date).days
 
 # group by name and day
-day = df.groupby([df['name'], pd.TimeGrouper(freq='D')]).count()
+day = df.groupby([df['name'], pd.Grouper(freq='D')]).count()
 # print(df.head())
 # print(day.head())
 
@@ -77,7 +77,10 @@ cmap = viridis(range(colorange))
 plt.figure(figsize=(20, 20))
 # x = np.linspace(0,n_days, len(result[0]))
 x = [min_date + pd.DateOffset(i) for i in range(len(result[0]))]
-plt.stackplot(x, np.array(result)[inds], labels=np.array(names)[
+days = []
+for i in range(len(x)):
+    days.append(i - len(x))
+plt.stackplot(days, np.array(result)[inds], labels=np.array(names)[
               inds], colors=[cmap[idx] for idx in first[inds]])
 plt.legend(loc='upper left')
 plt.savefig(OUTPUT_FILENAME)
